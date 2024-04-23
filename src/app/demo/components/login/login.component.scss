@@ -1,0 +1,18 @@
+.login-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    overflow: hidden;
+  
+    .login-card {
+      border-radius: 108px;
+      padding: 0.3rem;
+      background: linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%);
+      
+      .surface-card {
+        border-radius: 53px;
+      }
+    }
+  }
+  

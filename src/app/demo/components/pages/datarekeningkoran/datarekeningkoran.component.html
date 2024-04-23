@@ -1,0 +1,154 @@
+<div class="grid">
+  <div class="col-12">
+    <div class="card px-6 py-6">
+      <p-toast></p-toast>
+      <p-toolbar styleClass="mb-4">
+        <ng-template pTemplate="left">
+          <div class="my-2">
+            <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" (click)="askCreate()"></button>
+            <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedProducts()" [disabled]="!selectedProducts || !selectedProducts.length"></button>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="right">
+          <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import" chooseLabel="Import" class="mr-2 inline-block"></p-fileUpload>
+          <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help" (click)="dt.exportCSV()"></button>
+        </ng-template>
+      </p-toolbar>
+      <p-table #dt [value]="dataRekeningKorans" responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['namaDatarekeningkorans','created']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [(selection)]="selectedDatarekeningkorans" selectionMode="multiple" [rowHover]="true" dataKey="id">
+        <ng-template pTemplate="caption">
+          <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+            <h5 class="m-0">Manage Rekening Korans</h5>
+            <span class="block mt-2 md:mt-0 p-input-icon-left">
+              <i class="pi pi-search"></i>
+              <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Search..." class="w-full sm:w-auto" />
+            </span>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width: 3rem">
+              <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <th pSortableColumn="id">ID <p-sortIcon field="id"></p-sortIcon></th>
+            <th pSortableColumn="nominal">Nominal <p-sortIcon field="nominal"></p-sortIcon></th>
+            <th pSortableColumn="deskripsi">Deskripsi <p-sortIcon field="deskripsi"></p-sortIcon></th>
+            <th pSortableColumn="verifikasi">Verifikasi <p-sortIcon field="verifikasi"></p-sortIcon></th>
+            <th pSortableColumn="checker1">Checker1 <p-sortIcon field="checker1"></p-sortIcon></th>
+            <th pSortableColumn="checker2">Checker2 <p-sortIcon field="checker2"></p-sortIcon></th>
+            <th pSortableColumn="created">Created Date <p-sortIcon field="created"></p-sortIcon></th>
+            <th pSortableColumn="updated">Updated Date <p-sortIcon field="updated"></p-sortIcon></th>
+            <th pSortableColumn="createdBy">Created By <p-sortIcon field="createdBy"></p-sortIcon></th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-dataRekeningKorans>
+          <tr>
+            <td>
+              <p-tableCheckbox [value]="dataRekeningKorans"></p-tableCheckbox>
+            </td>
+            <td>{{ dataRekeningKorans.id }}</td>
+            <td>{{ dataRekeningKorans.nominal }}</td>
+            <td>{{ dataRekeningKorans.deskripsi }}</td>
+            <td>{{ dataRekeningKorans.verifikasi }}</td>
+            <td>{{ dataRekeningKorans.checker1 }}</td>
+            <td>{{ dataRekeningKorans.checker2 }}</td>
+            <td>{{ dataRekeningKorans.created }}</td>
+            <td>{{ dataRekeningKorans.updated }}</td>
+            <td>{{ dataRekeningKorans.createdBy }}</td>
+            <td>
+              <div class="flex">
+                  <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="askUpdate(dataRekeningKorans)"></button>
+                  <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="askDelete(dataRekeningKorans)"></button>
+              </div>
+          </td>
+          </tr>
+        </ng-template>
+      </p-table>
+
+
+      <!-- create dialog pop up modal -->
+      <p-dialog [(visible)]="createDialog" [style]="{width: '450px'}" header="add Data Rekening Koran" [modal]="true" class="p-fluid">
+        <ng-template pTemplate="content">
+        
+            <div class="field">
+                <label for="name">Deskripsi</label>
+                <input type="text" pInputText id="deskripsi" [(ngModel)]="dataRekeningKoranPost.deskripsi" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !dataRekeningKoranPost.deskripsi}"/>
+                <small class="ng-dirty ng-invalid" *ngIf="submitted && !dataRekeningKoranPost.deskripsi">Deskripsi is required.</small>
+            </div>
+         
+
+            <div class="formgrid grid">
+
+                <div class="field col">
+                    <label for="quantity">Nominal</label>
+                    <p-inputNumber id="nominal" [(ngModel)]="dataRekeningKoranPost.nominal"></p-inputNumber>
+                </div>
+
+            </div>
+        </ng-template>
+
+        <ng-template pTemplate="footer">
+            <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="createDialog = false"></button>
+            <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="doCreate()"></button>
+        </ng-template>
+    </p-dialog>
+
+
+      <!-- edit dialog pop up modal -->
+      <p-dialog [(visible)]="updateDialog" [style]="{width: '450px'}" header="Edit Data Rekening Koran" [modal]="true" class="p-fluid">
+        <ng-template pTemplate="content">
+        
+            <div class="field">
+                <label for="name">Deskripsi</label>
+                <input type="text" pInputText id="deskripsi" [(ngModel)]="dataRekeningKoranPost.deskripsi" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !dataRekeningKoranPost.deskripsi}"/>
+                <small class="ng-dirty ng-invalid" *ngIf="submitted && !dataRekeningKoranPost.deskripsi">Deskripsi is required.</small>
+            </div>
+         
+
+            <div class="formgrid grid">
+
+                <div class="field col">
+                    <label for="quantity">Nominal</label>
+                    <p-inputNumber id="nominal" [(ngModel)]="dataRekeningKoranPost.nominal"></p-inputNumber>
+                </div>
+
+            </div>
+        </ng-template>
+
+        <ng-template pTemplate="footer">
+            <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="updateDialog = false"></button>
+            <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="doUpdate()"></button>
+        </ng-template>
+    </p-dialog>
+
+
+
+    <!-- pop up modal to delete data -->
+    <p-dialog [(visible)]="deleteDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+        <div class="flex align-items-center justify-content-center">
+            <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+            <span *ngIf="dataRekeningKoran">Are you sure you want to delete <b>{{dataRekeningKoran.deskripsi}}</b>?</span>
+        </div>
+        <ng-template pTemplate="footer">
+            <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteDialog = false"></button>
+            <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="doDelete()"></button>
+        </ng-template>
+    </p-dialog>
+
+    <!-- <p-dialog [(visible)]="deleteDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+        <div class="flex align-items-center justify-content-center">
+            <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+            <span>Are you sure you want to delete selected products?</span>
+        </div>
+        <ng-template pTemplate="footer">
+            <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteProductsDialog = false"></button>
+            <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDeleteSelected()"></button>
+        </ng-template>
+    </p-dialog> -->
+
+
+
+
+
+    </div>
+  </div>
+</div>

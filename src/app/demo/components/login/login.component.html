@@ -1,0 +1,150 @@
+<img src="assets/layout/images/{{layoutService.config().colorScheme === 'light' ? 'logo-dark' : 'logo-white'}}.svg" alt="Sakai logo" class="mb-5 w-6rem flex-shrink-0">                
+        
+        
+<div style="border-radius:16x; padding:0.3rem; background: linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%);">
+    <div class="w-full surface-card py-8 px-5 sm:px-8" style="border-radius:4px">
+   
+
+
+        <div class="col-12">
+            <div class="card">
+               
+                <div class="grid">
+                    <!-- Login Column -->
+                    <div class="col-5 flex  justify-content-center">
+                        <div class="p-fluid">
+
+                            <h3 style="color: green; font-weight: bold;">Login</h3> <!-- Add Login text here -->
+
+                            <div class="field">
+                                <label for="username">Username</label>
+                                <input pInputText id="login-username" type="text" [(ngModel)]="loginData.username"/>
+                            </div>
+                            <div class="field">
+                                <label for="password">Password</label>
+                                <input pInputText id="login-password" type="password" [(ngModel)]="loginData.password"/>
+                            </div>
+                            <p-button label="Login" class="mt-2" (onClick)="login()"></p-button>
+                        </div>
+                    </div>
+        
+                    <!-- Divider Column -->
+                    <div class="col-2">
+                        <p-divider layout="vertical">
+                            <b>OR</b>
+                        </p-divider>
+                    </div>
+        
+                    <!-- Register Column -->
+                    <div class="col-5 align-items-center justify-content-center">
+                        <div class="p-fluid">
+
+                            <h3 style="color: blue; font-weight: bold;">Register</h3> <!-- Add Register text here -->
+
+                            <form #registerForm="ngForm" (ngSubmit)="doRegister()">
+                                <div class="field">
+                                    <label for="username">Username</label>
+                                    <input type="text" pInputText id="username" name="username" [(ngModel)]="registerData.username" required>
+                                </div>
+                                <div class="field">
+                                    <label for="email">Email</label>
+                                    <input type="email" pInputText id="email" name="email" [(ngModel)]="registerData.email" required>
+                                </div>
+                                <div class="field">
+                                    <label for="noHp">Phone Number</label>
+                                    <input type="text" pInputText id="noHp" name="noHp" [(ngModel)]="registerData.noHp" required>
+                                </div>
+                                <div class="field">
+                                    <label for="tanggalLahir">Date of Birth</label>
+                                    <input type="date" pInputText id="tanggalLahir" name="tanggalLahir" [(ngModel)]="registerData.tanggalLahir" required>
+                                </div>
+                                <div class="field">
+                                    <label for="password">Password</label>
+                                    <input type="password" pInputText id="password" name="password" [(ngModel)]="registerData.password" required>
+                                </div>
+                                <div class="field">
+                                    <label for="alamat">Address</label>
+                                    <input type="text" pInputText id="alamat" name="alamat" [(ngModel)]="registerData.alamat" required>
+                                </div>
+                                <div class="field">
+                                    <label for="namaLengkap">Full Name</label>
+                                    <input type="text" pInputText id="namaLengkap" name="namaLengkap" [(ngModel)]="registerData.namaLengkap" required>
+                                </div>
+        
+                                <!-- Button to get OTP -->
+                                <button type="submit" pButton pRipple label="GET OTP" class="p-button-success" (click)="doRegister()" ></button>
+        
+                            </form>
+
+                            <form #otpForm="ngForm" (ngSubmit)="doOTP()">
+
+                                   <!-- Input field for OTP -->
+                                   <div class="field">
+                                    <label for="otp">OTP</label>
+                                    <input type="text" pInputText id="otp" name="otp" [(ngModel)]="otp.token" required>
+                                    </div>
+        
+                   
+                                <button type="submit" pButton pRipple label="Register" class="p-button-success" ></button>
+
+
+                            </form>
+
+
+                            <p-dialog [(visible)]="registerSuccessDialog" [style]="{width: '450px'}" header="OTP TELAH DIKIRIMKAN" [modal]="true" class="p-fluid">
+                                <ng-template pTemplate="content">
+                                    <!-- Add form fields here for adding new data -->
+                                    <div class="field">
+                                        <h3 style="color: blue; font-weight: bold;">Silahkan check otp di email</h3> <!-- Add Register text here -->
+                                    </div>
+                                    <!-- Add more fields as needed -->
+                
+                                </ng-template>
+                
+                        
+                            </p-dialog>
+
+
+
+                            <p-dialog [(visible)]="otpSuccessDialog" [style]="{width: '450px'}" header="OTP SUCCESS" [modal]="true" class="p-fluid">
+                                <ng-template pTemplate="content">
+                                    <!-- Add form fields here for adding new data -->
+                                    <div class="field">
+                                        <h3 style="color: blue; font-weight: bold;">Register Success, silahkan login</h3> <!-- Add Register text here -->
+                                    </div>
+                                    <!-- Add more fields as needed -->
+                
+                                </ng-template>
+                
+                        
+                            </p-dialog>
+                             
+
+                            <p-dialog [(visible)]="otpFailedDialog" [style]="{width: '450px'}" header="OTP FAILED" [modal]="true" class="p-fluid">
+
+                                <ng-template pTemplate="content">
+                                    <!-- Add form fields here for adding new data -->
+                                    <div class="field">
+                                        <h3 style="color: blue; font-weight: bold;">Verifikasi OTP GAGAL</h3> <!-- Add Register text here -->
+                                    </div>
+                                    <!-- Add more fields as needed -->
+                
+                                </ng-template>
+                
+                        
+                            </p-dialog>
+
+
+                           
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+</div>

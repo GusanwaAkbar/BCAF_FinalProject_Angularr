@@ -1,141 +1,194 @@
 import { Component, OnInit } from '@angular/core';
-import { Product } from 'src/app/demo/api/product';
 import { MessageService } from 'primeng/api';
-import { Table } from 'primeng/table';
-import { ProductService } from 'src/app/demo/service/product.service';
+import { RekeningKoran } from 'src/app/models/rekeningkoran';
+import { RekeningKoranService } from 'src/app/services/rekeningkoran.service';
+import { Router } from '@angular/router';
+import { RekeningKoranPost } from 'src/app/models-post/rekening-koran-post';
 
 @Component({
     templateUrl: './crud.component.html',
     providers: [MessageService]
 })
+
 export class CrudComponent implements OnInit {
 
-    productDialog: boolean = false;
+  //modal atribut
+  rekeningKoranPost: RekeningKoranPost;
+  rekeningKoran: RekeningKoran;
 
-    deleteProductDialog: boolean = false;
+  //data atribut
+  rekeningKorans: RekeningKoran[] = [];
+  selectedRekeningKorans: RekeningKoran[] = [];
 
-    deleteProductsDialog: boolean = false;
 
-    products: Product[] = [];
+  rekeningKoranDialog: boolean = false;
+  deleteRekeningKoranDialog: boolean = false;
+  editRekeningKoranDialog: boolean = false;
+  deleteRekeningKoransDialog: boolean = false;
 
-    product: Product = {};
 
-    selectedProducts: Product[] = [];
 
-    submitted: boolean = false;
 
-    cols: any[] = [];
+  submitted: boolean = false;
+  cols: any[] = [];
+  rowsPerPageOptions = [5, 10, 20];
 
-    statuses: any[] = [];
+  idRekeningKoran:number
+  
+ 
 
-    rowsPerPageOptions = [5, 10, 20];
+  
 
-    constructor(private productService: ProductService, private messageService: MessageService) { }
+  constructor(private rekeningKoranService: RekeningKoranService, private router: Router) { }
 
-    ngOnInit() {
-        this.productService.getProducts().then(data => this.products = data);
+    ngOnInit(): void {
 
-        this.cols = [
-            { field: 'product', header: 'Product' },
-            { field: 'price', header: 'Price' },
-            { field: 'category', header: 'Category' },
-            { field: 'rating', header: 'Reviews' },
-            { field: 'inventoryStatus', header: 'Status' }
-        ];
+    this.rekeningKoranService.getRekeningKorans().subscribe(response => {
+      this.rekeningKorans = response.content;
+    });
 
-        this.statuses = [
-            { label: 'INSTOCK', value: 'instock' },
-            { label: 'LOWSTOCK', value: 'lowstock' },
-            { label: 'OUTOFSTOCK', value: 'outofstock' }
-        ];
     }
 
     openNew() {
-        this.product = {};
-        this.submitted = false;
-        this.productDialog = true;
+
+      this.rekeningKoranPost = new RekeningKoranPost;
+      this.submitted = false;
+      this.rekeningKoranDialog = true;
+
     }
 
-    deleteSelectedProducts() {
-        this.deleteProductsDialog = true;
+    createRekeningKoran() {
+      this.submitted = true;
+      if (this.validateData()) {
+          this.rekeningKoranService.createRekeningKoran(this.rekeningKoranPost).subscribe(
+              (response) => {
+                  // Handle successful addition
+                  console.log('Rekening koran added successfully:', response);
+                  // You may want to perform additional actions like refreshing the table
+                  this.hideDialog();
+              },
+              (error) => {
+                  console.error('Error adding rekening koran:', error);
+                  // Handle error
+              }
+          );
+      }
     }
 
-    editProduct(product: Product) {
-        this.product = { ...product };
-        this.productDialog = true;
-    }
 
-    deleteProduct(product: Product) {
-        this.deleteProductDialog = true;
-        this.product = { ...product };
-    }
+  askDeleteRekeningKoran(rekeningKoran) {
+
+      //this.idRekeningKoran = id
+      this.rekeningKoran = rekeningKoran
+
+
+      this.deleteRekeningKoranDialog = true;
+      // Handle deleting a single item
+  }
+
+  
+  deleteRekeningKoran(): void {
+    //this.deleteRekeningKoransDialog = true;
+
+    this.rekeningKoranService.deleteRekeningKoran(this.rekeningKoran.id).subscribe(
+      () => {
+        console.log('Rekening koran deleted successfully');
+        this.rekeningKoranDialog = false
+
+
+        // Perform any additional actions after successful deletion
+        // Do Redirect
+      },
+      (error) => {
+        console.error('Error deleting rekening koran:', error);
+        // Handle error
+      }
+    );
+  }
+
+  askUpdateRekeningKoran(rekeningKoran){
+
+    this.rekeningKoran = rekeningKoran
+    this.rekeningKoranPost = new RekeningKoranPost;
+    this.submitted = false;
+    this.rekeningKoranDialog = true;
+    this.editRekeningKoranDialog = true
+
+  }
+
+  updateRekeningKoran(){
+
+    //this.rekeningKoranPost = rekeningKoran
+
+    if (this.validateData()) {
+
+      
+
+      this.rekeningKoranService.updateRekeningKoran(this.rekeningKoranPost, this.rekeningKoran.id).subscribe(
+          (response) => {
+              // Handle successful addition
+              console.log('Rekening koran added successfully:', response);
+              // You may want to perform additional actions like refreshing the table
+              this.hideDialog();
+          },
+          (error) => {
+              console.error('Error adding rekening koran:', error);
+              // Handle error
+          }
+      );
+
+  }
+
+
+  }
+
+
+
+
+  deleteSelectedRekeningKorans() {
+    this.deleteRekeningKoransDialog = true;
+  }
+
+  validateData(): boolean {
+      // Implement validation logic here
+      // Return true if data is valid, otherwise return false
+      return true;
+  }
+
+   
+
+
+    
+    
 
     confirmDeleteSelected() {
-        this.deleteProductsDialog = false;
-        this.products = this.products.filter(val => !this.selectedProducts.includes(val));
-        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Products Deleted', life: 3000 });
-        this.selectedProducts = [];
+        this.deleteRekeningKoranDialog = false;
+        // Handle deleting selected items
     }
 
-    confirmDelete() {
-        this.deleteProductDialog = false;
-        this.products = this.products.filter(val => val.id !== this.product.id);
-        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Deleted', life: 3000 });
-        this.product = {};
-    }
+    
 
     hideDialog() {
-        this.productDialog = false;
+        this.rekeningKoranDialog = false;
         this.submitted = false;
     }
 
-    saveProduct() {
+    saveRekeningKoran() {
         this.submitted = true;
-
-        if (this.product.name?.trim()) {
-            if (this.product.id) {
-                // @ts-ignore
-                this.product.inventoryStatus = this.product.inventoryStatus.value ? this.product.inventoryStatus.value : this.product.inventoryStatus;
-                this.products[this.findIndexById(this.product.id)] = this.product;
-                this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Updated', life: 3000 });
-            } else {
-                this.product.id = this.createId();
-                this.product.code = this.createId();
-                this.product.image = 'product-placeholder.svg';
-                // @ts-ignore
-                this.product.inventoryStatus = this.product.inventoryStatus ? this.product.inventoryStatus.value : 'INSTOCK';
-                this.products.push(this.product);
-                this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Created', life: 3000 });
-            }
-
-            this.products = [...this.products];
-            this.productDialog = false;
-            this.product = {};
-        }
+        // Handle saving
     }
 
-    findIndexById(id: string): number {
-        let index = -1;
-        for (let i = 0; i < this.products.length; i++) {
-            if (this.products[i].id === id) {
-                index = i;
-                break;
-            }
-        }
-
-        return index;
+    onGlobalFilter(event: Event) {
+        // Handle global filtering
     }
 
-    createId(): string {
-        let id = '';
-        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        for (let i = 0; i < 5; i++) {
-            id += chars.charAt(Math.floor(Math.random() * chars.length));
-        }
-        return id;
-    }
+    navigateToDetails(id: number) {
+      // Navigate to the details page with the specific ID
+      
+      this.router.navigate(['/pages/rekeningkoran', id]);
+  }
 
-    onGlobalFilter(table: Table, event: Event) {
-        table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
-    }
+
+
+
 }

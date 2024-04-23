@@ -1,26 +1,58 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Product } from 'src/app/demo/api/product';
+import { ProductService } from 'src/app/demo/service/product.service';
+import { SelectItem } from 'primeng/api';
 import { MessageService } from 'primeng/api';
 
 @Component({
     templateUrl: './filedemo.component.html',
-    providers: [MessageService]
-})
-export class FileDemoComponent {
-
-    uploadedFiles: any[] = [];
-
-    constructor(private messageService: MessageService) {}
-
-    onUpload(event: any) {
-        for (const file of event.files) {
-            this.uploadedFiles.push(file);
+    providers: [MessageService],
+    standalone:false,
+    styles: [`
+        :host ::ng-deep .p-cell-editing {
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
         }
+    `]
+})
+export class FileDemoComponent implements OnInit {
 
-        this.messageService.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded' });
+    products1: Product[];
+
+    products2: Product[];
+
+    statuses: SelectItem[];
+
+    clonedProducts: { [s: string]: Product; } = {};
+
+    constructor(private productService: ProductService, private messageService: MessageService) { }
+
+    ngOnInit() {
+        this.productService.getProductsSmall().then(data => this.products1 = data);
+        this.productService.getProductsSmall().then(data => this.products2 = data);
+
+        this.statuses = [{label: 'In Stock', value: 'INSTOCK'},{label: 'Low Stock', value: 'LOWSTOCK'},{label: 'Out of Stock', value: 'OUTOFSTOCK'}]
+
+        console.log("clicked tabel edit")
     }
 
-    onBasicUpload() {
-        this.messageService.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded with Basic Mode' });
+    onRowEditInit(product: Product) {
+        this.clonedProducts[product.id] = {...product};
+    }
+
+    onRowEditSave(product: Product) {
+        if (product.price > 0) {
+            delete this.clonedProducts[product.id];
+            this.messageService.add({severity:'success', summary: 'Success', detail:'Product is updated'});
+        }
+        else {
+            this.messageService.add({severity:'error', summary: 'Error', detail:'Invalid Price'});
+        }
+    }
+
+    onRowEditCancel(product: Product, index: number) {
+        this.products2[index] = this.clonedProducts[product.id];
+        delete this.clonedProducts[product.id];
     }
 
 }
