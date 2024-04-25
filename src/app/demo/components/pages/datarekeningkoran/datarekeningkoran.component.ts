@@ -4,6 +4,9 @@ import { IDataRekeningKoran } from 'src/app/interfaces/i-datarekeningkoran';
 import { DataRekeningKoran } from 'src/app/models/datarekeningkoran';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DataRekeningKoranPost } from 'src/app/models-post/data-rekening-koran-post';
+import { EditVerifikasi } from 'src/app/models/edit-verifikasi';
+import { Checker1 } from 'src/app/models/checker1';
+import { Checker2 } from 'src/app/models/checker2';
 
 
 @Component({
@@ -25,7 +28,11 @@ export class DataRekeningKoranComponent implements OnInit {
     dataRekeningKoranPost: DataRekeningKoranPost
     dataRekeningKoranId:number
     rekeningKoranId:number
+    dataVerifikasi:any
+    editVerifikasi: EditVerifikasi = { verifikasi: '' };
 
+    dataChecker1: Checker1 = { checker1: false };
+    dataChecker2: Checker2 = { checker2: false };
 
 
 
@@ -38,7 +45,7 @@ export class DataRekeningKoranComponent implements OnInit {
     updateDialog = false;
     deleteDialog = false;
     createDialog = false;
-    addCsvDialog = false
+    addCsvDialog = false;
 
 
 
@@ -47,6 +54,15 @@ export class DataRekeningKoranComponent implements OnInit {
     cols: any[] = [];
     rowsPerPageOptions = [5, 10, 20];
     id = 0;
+
+
+    verifikasiOptions: any = [
+      { label: 'SHF', value: 'SHF' },
+      { label: 'Settlement', value: 'Settlement' },
+      { label: 'UMK', value: 'UMK' },
+      { label: 'Pinalty', value: 'Pinalty' }
+    ];
+  
 
   
 
@@ -165,13 +181,101 @@ export class DataRekeningKoranComponent implements OnInit {
       (error) => {
           console.error('Error adding rekening koran:', error);
           // Handle error
+          }
+      );
+
+
       }
-  );
+
+      updateVerifikasi(event, dataRekeningKoranId): void {
+
+        this.rekeningKoranId = parseInt(this.route.snapshot.paramMap.get('id'));
 
 
-  }
+        // Assuming dataRekeningKorans is an array and you want to update the selected item's verifikasi
+        const selectedVerifikasi = event.value;
+        this.editVerifikasi.verifikasi = selectedVerifikasi
+
+        const selectedIndex = this.dataRekeningKorans.findIndex(item => item.verifikasi === selectedVerifikasi);
+        if (selectedIndex !== -1) {
+            const selectedDataRekeningKoran = this.dataRekeningKorans[selectedIndex];
+            // Call your service method and pass the selected value
+            this.dataRekeningKoranService.updateVerifikasi(this.rekeningKoranId, dataRekeningKoranId , this.editVerifikasi)
+                .subscribe(response => {
+                    // Handle the response if needed
+                    console.log("update from dropdown is succedd")
+                }, error => {
+                    // Handle any errors
+                });
+
+                
+
+        }
+    }
+
+
+    updateChecker1(checker1:boolean, dataRekeningKoranId)
+    {
+
+      this.rekeningKoranId = parseInt(this.route.snapshot.paramMap.get('id'));
+      this.dataChecker1.checker1 = checker1
+
+      console.log("data nya apa ya di bawah")
+      console.log(this.dataChecker1)
+
+      
+
+      // Assuming dataRekeningKorans is an array and you want to update the selected item's verifikasi
+        if(checker1){
+          this.dataRekeningKoranService.updateChecker1(this.rekeningKoranId, dataRekeningKoranId , this.dataChecker1)
+          .subscribe(response => {
+              // Handle the response if needed
+              console.log("update from dropdown is succedd")
+          }, error => {
+              // Handle any errors
+          });
+        } else { 
+          console.log("checker 1 belum ke isi")
+        }
+          
+            
+      }
+
+
+      updateChecker2(checker2: boolean, dataRekeningKoranId: number) {
+
+        this.rekeningKoranId = parseInt(this.route.snapshot.paramMap.get('id'));
+        this.dataChecker2.checker2 = checker2;
+      
+        console.log("Data below:");
+        console.log(this.dataChecker2);
+      
+        // Assuming dataRekeningKorans is an array and you want to update the selected item's verification
+        if (checker2) {
+          this.dataRekeningKoranService.updateChecker2(this.rekeningKoranId, dataRekeningKoranId, this.dataChecker2)
+            .subscribe(response => {
+              // Handle the response if needed
+              console.log("Update from dropdown was successful.");
+            }, error => {
+              // Handle any errors
+              console.error("Error updating checker 2:", error);
+            });
+        } else {
+          console.log("Checker 2 is not filled yet.");
+        }
+      
+      }
+      
+
+
+    }
+    
+
 
 
   
 
-}
+
+  
+
+

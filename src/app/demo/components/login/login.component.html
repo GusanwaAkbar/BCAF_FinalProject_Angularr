@@ -72,20 +72,23 @@
                                 </div>
         
                                 <!-- Button to get OTP -->
-                                <button type="submit" pButton pRipple label="GET OTP" class="p-button-success" (click)="doRegister()" ></button>
+                                <button  pButton pRipple label="GET OTP" class="p-button-success" (click)="doRegister()" ></button>
+
+                                 <!-- Button to RE SEND OTP -->
+                                 <button  pButton pRipple label="RESEND OTP" class="p-button-success" (click)="doResend()" ></button>
         
                             </form>
 
-                            <form #otpForm="ngForm" (ngSubmit)="doOTP()">
+                            <form #otpForm="ngForm" >
 
                                    <!-- Input field for OTP -->
                                    <div class="field">
                                     <label for="otp">OTP</label>
-                                    <input type="text" pInputText id="otp" name="otp" [(ngModel)]="otp.token" required>
+                                    <input type="text" pInputText id="otp" name="otp" [(ngModel)]="otp.otp" required>
                                     </div>
         
                    
-                                <button type="submit" pButton pRipple label="Register" class="p-button-success" ></button>
+                                <button  pButton pRipple label="Register" class="p-button-success" (click)="doOTP(registerData.username)"></button>
 
 
                             </form>

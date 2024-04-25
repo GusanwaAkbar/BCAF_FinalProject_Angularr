@@ -55,4 +55,17 @@ export class CobaComponentComponent implements OnInit {
   }
 
 
+  onProductCodeChange(newCode: string) {
+    // Handle the code change here
+    console.log("New product code:", newCode);
+    // You can perform additional actions here if needed
+}
+
+    onProductCodeInput() {
+        // Handle the input change here
+        console.log("Input detected on product code!!!!!!!!:");
+        // You can perform additional actions here if needed
+    }
+
+
 }

@@ -48,9 +48,21 @@
             <td>{{ dataRekeningKorans.id }}</td>
             <td>{{ dataRekeningKorans.nominal }}</td>
             <td>{{ dataRekeningKorans.deskripsi }}</td>
-            <td>{{ dataRekeningKorans.verifikasi }}</td>
-            <td>{{ dataRekeningKorans.checker1 }}</td>
-            <td>{{ dataRekeningKorans.checker2 }}</td>
+            
+            <td>
+              <p-dropdown [options]="verifikasiOptions" [(ngModel)]="dataRekeningKorans.verifikasi"  (onChange)="updateVerifikasi($event, dataRekeningKorans.id)"></p-dropdown>
+            </td>
+          
+            <td>
+              <p-checkbox [(ngModel)]="dataRekeningKorans.checker1" binary="true" (ngModelChange)="updateChecker1($event, dataRekeningKorans.id)"></p-checkbox>
+          </td>
+          <td>
+              <p-checkbox [(ngModel)]="dataRekeningKorans.checker2" binary="true" (ngModelChange)="updateChecker2($event , dataRekeningKorans.id)"></p-checkbox>
+          </td>
+          
+            
+            
+
             <td>{{ dataRekeningKorans.created }}</td>
             <td>{{ dataRekeningKorans.updated }}</td>
             <td>{{ dataRekeningKorans.createdBy }}</td>

@@ -11,3 +11,5 @@ import { DataRekeningKoranModule } from './datarekeningkoran.module';
 	exports: [RouterModule]
 })
 export class DataRekeningKoranRoutingModule { }
+
+

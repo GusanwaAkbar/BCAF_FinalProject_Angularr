@@ -1,10 +1,11 @@
 export class OTP {
 
-    token:number
+    username: string
+    otp:number
 
-    constructor (otp:number)
+    constructor (otp:number, username:string)
     {
-
+        
     }
 
 }

@@ -6,6 +6,9 @@ import { IDataRekeningKoran } from '../interfaces/i-datarekeningkoran';
 import { DataRekeningKoran } from '../models/datarekeningkoran';
 import { RekeningKoran } from '../models/rekeningkoran';
 import { DataRekeningKoranPost } from '../models-post/data-rekening-koran-post';
+import { EditVerifikasi } from '../models/edit-verifikasi';
+import { Checker1 } from '../models/checker1';
+import { Checker2 } from '../models/checker2';
 
 // Define an interface for the response structure
 interface DataRekeningKoranResponse {
@@ -81,6 +84,7 @@ export class DataRekeningKoranService {
     if (token) {
       // Add authorization header if token exists
       headers = headers.set('Authorization', `Bearer ${token}`);
+      headers = headers.set('Content-Type', 'application/json');
       console.log("Token successfully added to the header:");
       console.log(headers); // Log the headers object
       console.log("Id service nya adalah")
@@ -126,6 +130,88 @@ export class DataRekeningKoranService {
 
    
   }
+
+  updateVerifikasi(idRekeningKoran:number, idDataRekeningKoran:number, verifikasi:EditVerifikasi): Observable<any> {
+    
+    const token = localStorage.getItem('token'); // Get the token from local storage
+    let headers = new HttpHeaders();
+    if (token) {
+      // Add authorization header if token exists
+      headers = headers.set('Authorization', `Bearer ${token}`);
+
+      console.log("Token successfully added to the header:");
+      console.log(headers); // Log the headers object
+      console.log("Id service nya adalah")
+      headers = headers.set('Content-Type', 'application/json');
+     // console.log(id)
+      console.log("konsol log service bawah my header")
+      console.log(headers)
+      console.log(token)
+      console.log("ini ngadalah hasil input" + verifikasi)
+
+      console.log("why dont edit verifikasi servce")
+    }
+
+    return this.http.put<EditVerifikasi>(`${this.apiUrl}/RekeningKoran/${idRekeningKoran}/editVerifikasi/${idDataRekeningKoran}`, verifikasi, { headers });
+
+
+  }
+
+
+  updateChecker1(idRekeningKoran:number, idDataRekeningKoran:number, checker1:Checker1): Observable<any> {
+    
+    const token = localStorage.getItem('token'); // Get the token from local storage
+    let headers = new HttpHeaders();
+    if (token) {
+      // Add authorization header if token exists
+      headers = headers.set('Authorization', `Bearer ${token}`);
+
+      console.log("Token successfully added to the header:");
+      console.log(headers); // Log the headers object
+      console.log("Id service nya adalah")
+      headers = headers.set('Content-Type', 'application/json');
+     // console.log(id)
+      console.log("konsol log service bawah my header")
+      console.log(headers)
+      console.log(token)
+      console.log("ini ngadalah hasil input" )
+      console.log( checker1)
+
+      console.log("why dont edit checker servce")
+    }
+
+    return this.http.put<Checker1>(`${this.apiUrl}/RekeningKoran/${idRekeningKoran}/editChecker1/${idDataRekeningKoran}`, checker1 , { headers });
+
+
+  }
+
+  updateChecker2(idRekeningKoran: number, idDataRekeningKoran: number, checker2: Checker2): Observable<any> {
+    
+    const token = localStorage.getItem('token'); // Get the token from local storage
+    let headers = new HttpHeaders();
+    if (token) {
+      // Add authorization header if token exists
+      headers = headers.set('Authorization', `Bearer ${token}`);
+
+      console.log("Token successfully added to the header:");
+      console.log(headers); // Log the headers object
+      console.log("Id service nya adalah")
+      headers = headers.set('Content-Type', 'application/json');
+     // console.log(id)
+      console.log("konsol log service bawah my header")
+      console.log(headers)
+      console.log(token)
+      console.log("ini ngadalah hasil input" )
+      console.log(checker2)
+
+      console.log("why dont edit checker servce")
+    }
+
+    return this.http.put<Checker2>(`${this.apiUrl}/RekeningKoran/${idRekeningKoran}/editChecker2/${idDataRekeningKoran}`, checker2 , { headers });
+}
+
+
+
 
 
 

@@ -36,7 +36,7 @@ export class LoginComponent {
 
     loginData: Login = new Login('', ''); // Initialize loginData with empty valuese
     registerData: Register = new Register('','','','','','','');
-    otp: OTP = new OTP(0);
+    otp: OTP = new OTP(0, "");
 
 
     registerDialog: boolean = false
@@ -114,7 +114,10 @@ export class LoginComponent {
 
     
     
-    doOTP() {
+    doOTP(username) {
+
+        this.otp.username = username;
+        
 
         this.authService.inputOTP(this.otp)
             .subscribe(
@@ -131,6 +134,40 @@ export class LoginComponent {
                         }
                 
             );
+
+    }
+
+    doResend()
+    {
+        this.authService.resend(this.registerData.username)
+
+        
+            .subscribe(
+                
+                (response: any) => {
+
+
+                    console.log("register is clicked, below is your rorm register")
+                    console.log(this.registerData)
+
+                    console.log('Register successful', response);
+                    if (response.success) {
+                        const token = response.data.token;
+                        console.log("my token register is below, saved at local storage browser")
+                        console.log(token)
+                        this.authService.saveToken({token});
+
+                        console.log("register is clicked, below is your rorm register")
+                        console.log(this.registerData)
+
+                        this.registerDialog = true
+                        }
+                    },
+                    error => {
+                        console.error('Login error', error);
+                        // Display error message to the user
+                    }
+                );
 
     }
 

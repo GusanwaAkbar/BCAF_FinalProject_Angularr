@@ -2,6 +2,7 @@ import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { NotfoundComponent } from './demo/components/notfound/notfound.component';
 import { AppLayoutComponent } from "./layout/app.layout.component";
+import { authGuard } from './guard/auth.guard';
 
 @NgModule({
     imports: [
@@ -16,7 +17,7 @@ import { AppLayoutComponent } from "./layout/app.layout.component";
                     { path: 'blocks', loadChildren: () => import('./demo/components/primeblocks/primeblocks.module').then(m => m.PrimeBlocksModule) },
                     { path: 'pages', loadChildren: () => import('./demo/components/pages/pages.module').then(m => m.PagesModule) },
                     { path: 'login', loadChildren: () => import('./demo/components/login/login.module').then(m => m.LoginModule) },
-                    {path:'coba', loadChildren: () => import('./coba/coba-component/coba-component.module').then(m => m.CobaComponentModule) }
+                    {path:'coba', loadChildren: () => import('./coba/coba-component/coba-component.module').then(m => m.CobaComponentModule) , canActivate: [authGuard]}
                 ]
             },
             { path: 'auth', loadChildren: () => import('./demo/components/auth/auth.module').then(m => m.AuthModule) },

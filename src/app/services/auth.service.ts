@@ -29,20 +29,33 @@ export class AuthService {
   }
 
   register(register: Register): Observable<any> {
+      
     const registerUrl = `${this.apiUrl}/api/auth0/v1/regis`; // Adjust the endpoint according to your backend
     
     return this.http.post(registerUrl, register);
   }
 
+  resend(username): Observable<any> {
+      
+    const registerUrl = `${this.apiUrl}/api/auth0/otp/resend`; // Adjust the endpoint according to your backend
+    
+    return this.http.post(registerUrl, username);
+  }
+
   inputOTP(otp:OTP): Observable<any> {
-    const token = localStorage.getItem('token'); // Get the token from local storage
-    let headers = new HttpHeaders();
-    if (token) {
-      // Add authorization header if token exists
-      headers = headers.set('Authorization', `Bearer ${token}`);
+    // const token = localStorage.getItem('token'); // Get the token from local storage
+    // let headers = new HttpHeaders();
+    // if (token) {
+    //   // Add authorization header if token exists
+    //   headers = headers.set('Authorization', `Bearer ${token}`);
+    // }
+
+    if(!otp)
+    {
+      "peler"
     }
 
-    return this.http.post<OTP>(this.apiUrl+ '/api/auth0/otp/v1', otp, { headers });
+    return this.http.post<OTP>(this.apiUrl+ '/api/auth0/otp/v1', otp, );
 
   }
 

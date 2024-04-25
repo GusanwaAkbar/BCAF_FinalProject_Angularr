@@ -15,6 +15,7 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { DialogModule } from 'primeng/dialog';
 import { MessageService } from 'primeng/api';
+import { CheckboxModule } from 'primeng/checkbox';
 
 import { DataRekeningKoranComponent } from './datarekeningkoran.component'; // Import the component
 import { DataRekeningKoranRoutingModule } from './datarekeningkoran-routing.module';
@@ -37,7 +38,9 @@ import { DataRekeningKoranRoutingModule } from './datarekeningkoran-routing.modu
     DropdownModule,
     RadioButtonModule,
     InputNumberModule,
-    DialogModule
+    DialogModule,
+    CheckboxModule,
+    
   ],
   declarations: [DataRekeningKoranComponent],
   providers: [MessageService],

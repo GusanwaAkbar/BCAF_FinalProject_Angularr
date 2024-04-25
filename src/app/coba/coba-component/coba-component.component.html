@@ -14,7 +14,7 @@
                 <td pEditableColumn>
                     <p-cellEditor>
                         <ng-template pTemplate="input">
-                            <input pInputText type="text" [(ngModel)]="product.code">
+                            <input pInputText type="text" [(ngModel)]="product.code"  (input)="onProductCodeInput()" >
                         </ng-template>
                         <ng-template pTemplate="output">
                             {{product.code}}
@@ -55,6 +55,8 @@
         </ng-template>
     </p-table>
 </div>
+
+
 
 <div class="card">
 <h5>Row Editing</h5>
