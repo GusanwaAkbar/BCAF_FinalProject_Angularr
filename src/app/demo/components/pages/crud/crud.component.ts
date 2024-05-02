@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MessageService } from 'primeng/api';
+import { LazyLoadEvent, MessageService } from 'primeng/api';
 import { RekeningKoran } from 'src/app/models/rekeningkoran';
 import { RekeningKoranService } from 'src/app/services/rekeningkoran.service';
 import { Router } from '@angular/router';
@@ -20,6 +20,8 @@ export class CrudComponent implements OnInit {
   rekeningKorans: RekeningKoran[] = [];
   selectedRekeningKorans: RekeningKoran[] = [];
 
+  
+
 
   rekeningKoranDialog: boolean = false;
   deleteRekeningKoranDialog: boolean = false;
@@ -36,18 +38,50 @@ export class CrudComponent implements OnInit {
   idRekeningKoran:number
   
  
+  totalRecords: number = 0;
+  pageSize: number = 5;
+  sortField: string = 'id';  // Default sort field
+  sortOrder: number = 1;   
+  currentPage: number = 0;
+  
 
+  loading: boolean = false
   
 
   constructor(private rekeningKoranService: RekeningKoranService, private router: Router) { }
 
     ngOnInit(): void {
+   
 
     this.rekeningKoranService.getRekeningKorans().subscribe(response => {
-      this.rekeningKorans = response.content;
+      this.rekeningKorans = response.data.content;
+      this.totalRecords = response.data.totalElements;
+
+      console.log("on init")
+      console.log(response)
     });
 
+
+
     }
+
+      // Example method that might be called on page change
+
+
+    fetchRekeningKorans(page: number = this.currentPage, size: number = this.pageSize, sortOrder:number = this.sortOrder, sortField = this.sortField) {
+      this.currentPage = page; // Update current page
+      this.pageSize = size;   // Update page size
+      this.loading = true;
+      
+      let sort = sortOrder === 1 ? 'desc' : 'asc';
+  
+      this.rekeningKoranService.getRekeningKoransv2(page, size, sortField, sort).subscribe(response => {
+        this.rekeningKorans = response.data.content;
+        this.totalRecords = response.data.totalElements;
+        this.loading = false;
+      });
+    }
+  
 
     openNew() {
 
@@ -66,6 +100,8 @@ export class CrudComponent implements OnInit {
                   console.log('Rekening koran added successfully:', response);
                   // You may want to perform additional actions like refreshing the table
                   this.hideDialog();
+                  this.fetchRekeningKorans();
+                  
               },
               (error) => {
                   console.error('Error adding rekening koran:', error);
@@ -93,9 +129,9 @@ export class CrudComponent implements OnInit {
     this.rekeningKoranService.deleteRekeningKoran(this.rekeningKoran.id).subscribe(
       () => {
         console.log('Rekening koran deleted successfully');
-        this.rekeningKoranDialog = false
-
-
+        this.deleteRekeningKoranDialog = false
+        this.fetchRekeningKorans()
+     
         // Perform any additional actions after successful deletion
         // Do Redirect
       },
@@ -109,9 +145,9 @@ export class CrudComponent implements OnInit {
   askUpdateRekeningKoran(rekeningKoran){
 
     this.rekeningKoran = rekeningKoran
-    this.rekeningKoranPost = new RekeningKoranPost;
+//    this.rekeningKoranPost = new RekeningKoranPost;
+    this.rekeningKoranPost = {...rekeningKoran};
     this.submitted = false;
-    this.rekeningKoranDialog = true;
     this.editRekeningKoranDialog = true
 
   }
@@ -129,7 +165,9 @@ export class CrudComponent implements OnInit {
               // Handle successful addition
               console.log('Rekening koran added successfully:', response);
               // You may want to perform additional actions like refreshing the table
-              this.hideDialog();
+              this.editRekeningKoranDialog = false;
+              this.fetchRekeningKorans();
+          
           },
           (error) => {
               console.error('Error adding rekening koran:', error);
@@ -189,6 +227,105 @@ export class CrudComponent implements OnInit {
   }
 
 
+  //rekeningKorans: any[] = [];
+ 
 
+
+
+
+
+  loadRekeningKorans(event: LazyLoadEvent) {
+    const page = 0;
+    const size = 5;
+    const sortField = event.sortField || this.sortField;
+    const sortOrder = 'asc';
+  
+    this.rekeningKoranService.getRekeningKoransv2(page, size, `${sortField},${sortOrder}`).subscribe(data => {
+      this.rekeningKorans = data.data.content;
+      this.totalRecords = data.data.totalElements;
+
+      console.log(this.rekeningKorans)
+    });
+  }
+
+
+  loadFiles(event?: any) {
+    this.loading = true;
+    let page: number = 0;
+    let sort: string = 'asc';
+    let sortBy: string = 'createdAt';
+
+    if (event) {
+      page = event.first === 0 ? 0 : event.first / event.rows;
+      if (page)
+      {
+        this.currentPage = page
+      }
+      
+      this.pageSize = event.rows; // Update pageSize based on the event
+
+
+      sort = event.sortOrder === 1 ? 'desc' : 'asc';
+      if(sort)
+      {
+        this.sortOrder = event.sortOrder
+      }
+
+
+
+      sortBy = event.sortField;
+      if(sortBy)
+      {
+        this.sortField = sortBy
+      }
+
+
+
+    }
+
+    this.rekeningKoranService.getRekeningKoransv2(page, this.pageSize, sortBy, sort)
+      .subscribe(
+        (response) => {
+          this.rekeningKorans = response.data.content;
+          this.totalRecords = response.data.totalElements;
+          this.loading = false;
+        }
+      );
+  }
+
+
+
+  // loadFiles(event?: any) {
+  //   this.loading = true;
+  //   let page: number = 0;
+  //   let size: number = 5;
+  //   let sort: string = 'asc';
+  //   let sortBy: string = 'createdAt';
+
+  //   if (event) {
+  //     if (event.first === 0) {
+  //       page = event.first;
+  //     } else {
+  //       page = event.first / event.rows;
+  //     }
+
+  //     size = event.rows;
+  //     sort = event.sortOrder === 1 ? 'desc' : 'asc';
+  //     sortBy = event.sortField
+  //   }
+
+  //   this.rekeningKoranService.getRekeningKoransv2(page, size, sortBy, sort)
+  //     .subscribe(
+  //       (response) => {
+  //         this.rekeningKorans = response.data.content;
+  //         this.totalRecords = response.data.totalElements;
+  //         this.loading = false;
+  //       }
+  //     )
+  // }
+
+  // onPageChange(event: any): void {
+  //   this.loadRekeningKorans(event.page, event.rows);
+  // }
 
 }

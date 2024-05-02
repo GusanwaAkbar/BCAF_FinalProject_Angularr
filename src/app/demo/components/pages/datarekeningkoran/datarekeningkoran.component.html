@@ -6,15 +6,50 @@
         <ng-template pTemplate="left">
           <div class="my-2">
             <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" (click)="askCreate()"></button>
-            <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedProducts()" [disabled]="!selectedProducts || !selectedProducts.length"></button>
+          
           </div>
         </ng-template>
         <ng-template pTemplate="right">
-          <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import" chooseLabel="Import" class="mr-2 inline-block"></p-fileUpload>
-          <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help" (click)="dt.exportCSV()"></button>
+          <p-fileUpload mode="basic" accept=".csv" [maxFileSize]="1000000" label="Import" chooseLabel="Import" class="mr-2 inline-block" [customUpload]="true" [auto]="true" (uploadHandler)="onUpload($event)" ></p-fileUpload>
+          <button pButton pRipple label="Export" icon="pi pi-upload" class="p-bexportCSVutton-help" (click)="exportCSV()"></button>
         </ng-template>
       </p-toolbar>
-      <p-table #dt [value]="dataRekeningKorans" responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['namaDatarekeningkorans','created']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [(selection)]="selectedDatarekeningkorans" selectionMode="multiple" [rowHover]="true" dataKey="id">
+
+              <p-table 
+            #dt [value]="dataRekeningKorans" [paginator]="true" [rows]="10" [totalRecords]="totalRecords"
+            [lazy]="true" (onLazyLoad)="loadFiles($event)"    (onLazyLoad)="loadFiles($event)"
+            [rowsPerPageOptions]="[10,20,30]" 
+            [globalFilterFields]="['namaRekeningKoran', 'created']" selectionMode="multiple"
+            [(selection)]="selectedRekeningKorans" [showCurrentPageReport]="true"
+            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+            
+            [sortField]="sortField" [sortOrder]="sortOrder"
+            
+    
+            [lazy]="true"
+            [sortField]="sortField"
+            (onLazyLoad)="loadFiles($event)"
+    
+            [totalRecords]="totalRecords"
+            [loading]="isLoading"
+            [columns]="cols"
+            responsiveLayout="scroll"
+            [rowsPerPageOptions]="[5,10,15]"
+            [rows]="5"
+            [globalFilterFields]="['username']"
+            [paginator]="true"
+            [showCurrentPageReport]="true"
+            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+            selectionMode="multiple"
+            [rowHover]="true"
+            dataKey="userId">
+
+            
+         
+         
+         >
+
+
         <ng-template pTemplate="caption">
           <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
             <h5 class="m-0">Manage Rekening Korans</h5>
@@ -29,6 +64,7 @@
             <th style="width: 3rem">
               <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
             </th>
+
             <th pSortableColumn="id">ID <p-sortIcon field="id"></p-sortIcon></th>
             <th pSortableColumn="nominal">Nominal <p-sortIcon field="nominal"></p-sortIcon></th>
             <th pSortableColumn="deskripsi">Deskripsi <p-sortIcon field="deskripsi"></p-sortIcon></th>
@@ -37,7 +73,7 @@
             <th pSortableColumn="checker2">Checker2 <p-sortIcon field="checker2"></p-sortIcon></th>
             <th pSortableColumn="created">Created Date <p-sortIcon field="created"></p-sortIcon></th>
             <th pSortableColumn="updated">Updated Date <p-sortIcon field="updated"></p-sortIcon></th>
-            <th pSortableColumn="createdBy">Created By <p-sortIcon field="createdBy"></p-sortIcon></th>
+      
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-dataRekeningKorans>
@@ -65,7 +101,7 @@
 
             <td>{{ dataRekeningKorans.created }}</td>
             <td>{{ dataRekeningKorans.updated }}</td>
-            <td>{{ dataRekeningKorans.createdBy }}</td>
+        
             <td>
               <div class="flex">
                   <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="askUpdate(dataRekeningKorans)"></button>

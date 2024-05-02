@@ -16,8 +16,6 @@ import { DropdownModule } from 'primeng/dropdown';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { DialogModule } from 'primeng/dialog';
-import { AuthInterceptor } from 'src/app/auth.interceptor';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
 
 @NgModule({
@@ -40,6 +38,6 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
         DialogModule
     ],
     declarations: [CrudComponent],
-    providers: [ { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true } ],
+    providers: [ ],
 })
 export class CrudModule { }

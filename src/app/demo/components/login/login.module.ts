@@ -34,6 +34,9 @@ import { DividerModule } from 'primeng/divider';
 import { SplitterModule } from 'primeng/splitter';
 import { PanelModule } from 'primeng/panel';
 
+import {MessagesModule} from 'primeng/messages';
+import {MessageModule} from 'primeng/message';
+
 
 @NgModule({
   
@@ -67,6 +70,8 @@ import { PanelModule } from 'primeng/panel';
     DividerModule,
     SplitterModule,
     PanelModule,
+    MessageModule,
+    MessagesModule,
 
     
   ],

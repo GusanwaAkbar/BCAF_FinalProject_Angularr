@@ -23,13 +23,12 @@ import {ButtonModule} from 'primeng/button';
 import {DropdownModule} from 'primeng/dropdown';
 import {ProgressBarModule} from 'primeng/progressbar';
 import {InputTextModule} from 'primeng/inputtext';
-import { AuthInterceptor } from 'src/app/auth.interceptor';
-import {  HTTP_INTERCEPTORS } from '@angular/common/http';
+
 
 @NgModule({
   declarations: [CobaComponentComponent],
-	providers: [ProductService,   { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true } ],
-  // Add the interceptor to providers
+	providers: [ProductService],
+
   
   imports: [
     CommonModule,

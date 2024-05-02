@@ -14,6 +14,7 @@ import { CommonModule } from '@angular/common';
 
 import { Register } from 'src/app/models/register';
 import { OTP } from 'src/app/models/otp';
+import { MessageService } from 'src/app/services/message.service';
 
 
 
@@ -45,11 +46,12 @@ export class LoginComponent {
     otpSuccessDialog = false
     otpFailedDialog = false
 
+
    
     
     
 
-    constructor(public layoutService: LayoutService, private authService: AuthService, private router: Router ) { }
+    constructor(public layoutService: LayoutService, private authService: AuthService, private router: Router, public messageService: MessageService ) { }
 
     login() {
         this.authService.login(this.loginData)
@@ -61,7 +63,7 @@ export class LoginComponent {
                         console.log("my token is below")
                         console.log(token)
                         this.authService.saveToken({token});
-                        this.router.navigate(['']); // Redirect to the home page upon successful login
+                        this.router.navigate(['/pages/rekeningkoran']); // Redirect to the home page upon successful login
                     }
                 },
                 error => {

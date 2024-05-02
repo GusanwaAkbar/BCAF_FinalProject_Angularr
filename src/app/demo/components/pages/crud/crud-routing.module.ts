@@ -10,3 +10,7 @@ import { CrudComponent } from './crud.component';
 	exports: [RouterModule]
 })
 export class CrudRoutingModule { }
+
+
+
+

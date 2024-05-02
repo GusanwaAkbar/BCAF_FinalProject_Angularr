@@ -7,11 +7,20 @@
 
 
         <div class="col-12">
+           <!-- messages.component.html -->
+                <div class="flex justify-content-center gap-2">
+                    <p-message *ngFor="let message of messageService.getMessages()" 
+                            [severity]="message.severity" 
+                            [text]="message.detail" [closable]="true"></p-message>
+                </div>
+
             <div class="card">
                
                 <div class="grid">
                     <!-- Login Column -->
                     <div class="col-5 flex  justify-content-center">
+
+                      
                         <div class="p-fluid">
 
                             <h3 style="color: green; font-weight: bold;">Login</h3> <!-- Add Login text here -->
@@ -41,7 +50,7 @@
 
                             <h3 style="color: blue; font-weight: bold;">Register</h3> <!-- Add Register text here -->
 
-                            <form #registerForm="ngForm" (ngSubmit)="doRegister()">
+                            <form #registerForm="ngForm" >
                                 <div class="field">
                                     <label for="username">Username</label>
                                     <input type="text" pInputText id="username" name="username" [(ngModel)]="registerData.username" required>

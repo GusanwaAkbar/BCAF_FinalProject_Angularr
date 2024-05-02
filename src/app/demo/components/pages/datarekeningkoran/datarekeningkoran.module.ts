@@ -19,6 +19,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 
 import { DataRekeningKoranComponent } from './datarekeningkoran.component'; // Import the component
 import { DataRekeningKoranRoutingModule } from './datarekeningkoran-routing.module';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   
@@ -40,6 +41,7 @@ import { DataRekeningKoranRoutingModule } from './datarekeningkoran-routing.modu
     InputNumberModule,
     DialogModule,
     CheckboxModule,
+    HttpClientModule,
     
   ],
   declarations: [DataRekeningKoranComponent],

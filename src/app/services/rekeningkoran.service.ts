@@ -1,13 +1,16 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { Observable, catchError } from 'rxjs';
 import { RekeningKoran } from '../models/rekeningkoran';
 import { environment } from 'src/environments/environment';
 import { RekeningKoranPost } from '../models-post/rekening-koran-post';
 
 // Define an interface for the response structure
 interface RekeningKoranResponse {
-  content: RekeningKoran[];
+  data: {
+    totalElements: number;
+    content: RekeningKoran[];
+  };
 }
 
 @Injectable({
@@ -30,6 +33,37 @@ export class RekeningKoranService {
     }
     // Make the HTTP GET request with the authorization header
     return this.http.get<RekeningKoranResponse>(`${this.apiUrl}/rekening-koran/`, { headers });
+  }
+
+  
+  getRekeningKoransv2(page: number, size: number, sortField?: string, sortOrder?:string): Observable<any> {
+    const token = localStorage.getItem('token'); // Retrieve the token from local storage
+    let headers = new HttpHeaders();
+    if (token) {
+      // Add authorization header if the token exists
+      headers = headers.set('Authorization', `Bearer ${token}`);
+      console.log("Token successfully added to the header:");
+      console.log(headers); // Log the headers object to debug or verify
+    }
+
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
+
+    if (sortField) {
+      params = params.set('sort', `${sortField},${sortOrder}`);
+      
+    }
+
+    // Make the HTTP GET request with the authorization header and parameters
+    return this.http.get(`${this.apiUrl}/rekening-koran/`, { headers, params })
+      .pipe(
+        catchError((error) => {
+          console.error('Error fetching detailed account data:', error);
+          throw 'Error fetching account data, please check the console for details.';
+        })
+      );
+      
   }
 
   createRekeningKoran(rekeningKoran: RekeningKoranPost): Observable<RekeningKoranPost> {
